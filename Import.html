@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extract Spreadsheet Data</title>
+    <link rel="stylesheet" href="import.css">
+</head>
+<body>
+    <h2>Extract Data from Spreadsheet</h2>
+   
+    <input type="file" id="fileInput" accept=".xlsx, .xls, .csv">
+    <button onclick="handleFile()">Extract Data</button>
+    <pre id="output"></pre>
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
+    <script>
+        function handleFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a file first.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+
+                // Get the first sheet
+                const sheetName = workbook.SheetNames[0];
+                const sheet = workbook.Sheets[sheetName];
+                const json = XLSX.utils.sheet_to_json(sheet);
+
+                // Display data
+                document.getElementById('output').textContent = JSON.stringify(json, null, 2);
+
+                // Send data to server
+                sendDataToServer(json);
+            };
+
+            reader.readAsArrayBuffer(file);
+        }
+
+        function sendDataToServer(data) {
+            console.log(data);
+            fetch('import.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+})
+.then(response => response.text())
+.then(result => {
+    console.log('Success:', result);
+})
+.catch(error => {
+    console.error('Error:', error);
+});
+        }
+    </script>
+</body>
+</html>
+
+

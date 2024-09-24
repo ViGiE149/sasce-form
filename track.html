@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submissions Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 60px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover, .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Submissions Track</h1>
+    <p>Total Submissions: <span id="totalCount">0</span></p>
+    <p>Unique Emails: <span id="uniqueEmailCount">0</span></p>
+    <table id="submissionsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Submission Type</th>
+                <th>Submission Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be inserted here -->
+        </tbody>
+    </table>
+
+    <!-- Modal for showing row details -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>User Details</h2>
+            <div class="modal-details-grid">
+                <div class="modal-detail-item"><strong>Timestamp:</strong> <span id="modalTimestamp"></span></div>
+                <div class="modal-detail-item"><strong>Email:</strong> <span id="modalEmail"></span></div>
+                <div class="modal-detail-item"><strong>Name:</strong> <span id="modalName"></span></div>
+                <div class="modal-detail-item"><strong>Phone:</strong> <span id="modalPhone"></span></div>
+                <div class="modal-detail-item"><strong>Institution:</strong> <span id="modalInstitution"></span></div>
+                <div class="modal-detail-item"><strong>Position:</strong> <span id="modalPosition"></span></div>
+                <div class="modal-detail-item"><strong>Membership Type:</strong> <span id="modalMembership"></span></div>
+                <div class="modal-detail-item"><strong>Exhibitor:</strong> <span id="modalExhibitor"></span></div>
+                <div class="modal-detail-item"><strong>Workshop:</strong> <span id="modalWorkshop"></span></div>
+                <div class="modal-detail-item"><strong>Abstract:</strong> <span id="modalAbstract"></span></div>
+                <div class="modal-detail-item"><strong>Sub-theme:</strong> <span id="modalSubtheme"></span></div>
+                <div class="modal-detail-item"><strong>Motivation:</strong> <span id="modalMotivation"></span></div>
+                <div class="modal-detail-item"><strong>Topic:</strong> <span id="modalTopic"></span></div>
+                <div class="modal-detail-item"><strong>Uploaded Abstract:</strong> <span id="modalUploadedAbstract"></span></div>
+                <div class="modal-detail-item"><strong>Upload Invoice:</strong> <span id="modalUploadInvoice"></span></div>
+                <div class="modal-detail-item"><strong>Responsible for Payment:</strong> <span id="modalResponsiblePayment"></span></div>
+                <div class="modal-detail-item"><strong>Invoice Contact:</strong> <span id="modalInvoiceContact"></span></div>
+                <div class="modal-detail-item"><strong>Delegate Official Address:</strong> <span id="modalDelegateAddress"></span></div>
+                <div class="modal-detail-item"><strong>Office Number:</strong> <span id="modalOfficeNumber"></span></div>
+                <div class="modal-detail-item"><strong>WIL Site Visit:</strong> <span id="modalWilSiteVisit"></span></div>
+                <div class="modal-detail-item"><strong>Arrival Time (Hotel):</strong> <span id="modalArrivalTimeHotel"></span></div>
+                <div class="modal-detail-item"><strong>Hotel Name:</strong> <span id="modalHotelName"></span></div>
+                <div class="modal-detail-item"><strong>Arrival Time (Registration):</strong> <span id="modalArrivalTimeRegistration"></span></div>
+                <div class="modal-detail-item"><strong>Accommodation Made:</strong> <span id="modalAccommodationMade"></span></div>
+                <div class="modal-detail-item"><strong>Payment Proof:</strong> <span id="modalPaymentProof"></span></div>
+                <div class="modal-detail-item"><strong>Payment Reference:</strong> <span id="modalPaymentReference"></span></div>
+                <div class="modal-detail-item"><strong>Payment Date:</strong> <span id="modalPaymentDate"></span></div>
+                <div class="modal-detail-item"><strong>Upload POP:</strong> <span id="modalUploadPOP"></span></div>
+                <div class="modal-detail-item"><strong>Created At:</strong> <span id="modalCreatedAt"></span></div>
+                <div class="modal-detail-item"><strong>Updated At:</strong> <span id="modalUpdatedAt"></span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fetch and display submissions
+            fetch('track.php')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('#submissionsTable tbody');
+                    const totalCountElem = document.querySelector('#totalCount');
+                    const uniqueEmailCountElem = document.querySelector('#uniqueEmailCount');
+                    
+                    tableBody.innerHTML = ''; // Clear any existing data
+
+                    data.submissions.forEach(submission => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${submission.id}</td>
+                            <td><a href="#" class="email-link" data-email="${submission.email}">${submission.email}</a></td>
+                            <td>${submission.name}</td>
+                            <td>${submission.submission_type}</td>
+                            <td>${submission.created_at}</td>
+                        `;
+
+                        // Attach click event to the email link
+                        row.querySelector('.email-link').addEventListener('click', function(event) {
+                            event.preventDefault();
+                            fetchUserData(submission.email);   // Fetch user data based on email
+                        });
+
+                        tableBody.appendChild(row);
+                    });
+
+                    totalCountElem.textContent = data.totalCount;
+                    uniqueEmailCountElem.textContent = data.uniqueEmailCount;
+                })
+                .catch(error => console.error('Error fetching submissions:', error));
+        });
+
+        function fetchUserData(email) {
+            fetch(`fetch_user.php?email=${email}`)
+                .then(response => response.json())
+                .then(submission => {
+                    showModal(submission);
+                })
+                .catch(error => console.error('Error fetching user details:', error));
+        }
+
+        function showModal(submission) {
+            // Populate modal with submission data
+            document.getElementById('modalTimestamp').textContent = submission.timestamp || 'N/A';
+            document.getElementById('modalEmail').textContent = submission.email || 'N/A';
+            document.getElementById('modalName').textContent = submission.name || 'N/A';
+            document.getElementById('modalPhone').textContent = submission.phone || 'N/A';
+            document.getElementById('modalInstitution').textContent = submission.institution || 'N/A';
+            document.getElementById('modalPosition').textContent = submission.position || 'N/A';
+            document.getElementById('modalMembership').textContent = submission.membership_type || 'N/A';
+            document.getElementById('modalExhibitor').textContent = submission.exhibitor || 'N/A';
+            document.getElementById('modalWorkshop').textContent = submission.workshop || 'N/A';
+            document.getElementById('modalAbstract').textContent = submission.abstract || 'N/A';
+            document.getElementById('modalSubtheme').textContent = submission.subtheme || 'N/A';
+            document.getElementById('modalMotivation').textContent = submission.motivation || 'N/A';
+            document.getElementById('modalTopic').textContent = submission.topic || 'N/A';
+            document.getElementById('modalUploadedAbstract').textContent = submission.upload_your_abstract || 'N/A';
+            document.getElementById('modalUploadInvoice').textContent = submission.upload_invoice || 'N/A';
+            document.getElementById('modalResponsiblePayment').textContent = submission.responsible_payment || 'N/A';
+            document.getElementById('modalInvoiceContact').textContent = submission.invoice_contact || 'N/A';
+            document.getElementById('modalDelegateAddress').textContent = submission.delegate_official_address || 'N/A';
+            document.getElementById('modalOfficeNumber').textContent = submission.office_number || 'N/A';
+            document.getElementById('modalWilSiteVisit').textContent = submission.wil_site_visit || 'N/A';
+            document.getElementById('modalArrivalTimeHotel').textContent = submission.hotel_arrival || 'N/A';
+            document.getElementById('modalHotelName').textContent = submission.hotel_name || 'N/A';
+            document.getElementById('modalArrivalTimeRegistration').textContent = submission.registration_desk_arrival || 'N/A';
+            document.getElementById('modalAccommodationMade').textContent = submission.accommodation || 'N/A';
+            document.getElementById('modalPaymentProof').textContent = submission.do_you_have_payment_proof  || 'N/A';
+            document.getElementById('modalPaymentReference').textContent = submission.payment_reference || 'N/A';
+            document.getElementById('modalPaymentDate').textContent = submission.payment_date || 'N/A';
+            document.getElementById('modalUploadPOP').textContent = submission.upload_pop || 'N/A';
+            document.getElementById('modalCreatedAt').textContent = submission.created_at || 'N/A';
+            document.getElementById('modalUpdatedAt').textContent = submission.updated_at || 'N/A';
+
+            // Show modal
+            const modal = document.getElementById('userModal');
+            modal.style.display = 'block';
+        }
+
+        // Close modal
+        document.querySelector('.close').addEventListener('click', function() {
+            document.getElementById('userModal').style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target == document.getElementById('userModal')) {
+                document.getElementById('userModal').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

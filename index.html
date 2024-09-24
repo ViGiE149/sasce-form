@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIL Africa 2024 verification & update</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>WIL Africa 2024 verification & update</h1>
+    <form id="registrationForm" action="submit.php" method="POST" enctype="multipart/form-data">
+
+        <input type="hidden" id="submission_type" name="submission_type" value="">
+
+
+        <label for="email">Email *</label>
+        <input type="email" id="email" name="email" required>
+
+
+ <!-- Title Dropdown -->
+ <label for="title">Your Title *</label>
+ <select id="title" name="title" onchange="showOtherTitleField()" required>
+     <option value="">Select Title</option>
+     <option value="Mr">Mr</option>
+     <option value="Ms">Ms</option>
+     <option value="Mrs">Mrs</option>
+     <option value="Dr">Dr</option>
+     <option value="Adv">Adv</option>
+     <option value="Prof">Prof</option>
+     <option value="Other">Other, give abbreviation</option>
+ </select>
+
+ <!-- Other Title Input Field (Hidden by Default) -->
+ <div id="otherTitleField" style="display: none;">
+     <label for="other_title">Specify Your Title</label>
+     <input type="text" id="other_title" name="other_title" >
+ </div>
+
+ <input type="text" id="submission_type"   name="submission_type" hidden>
+ 
+        <label for="name">Name and Surname *</label>
+        <input type="text" id="name" placeholder="john SMITH"  name="name" required>
+
+       
+
+        <label for="institution">Your Company/Organisation</label>
+        <input type="text" id="institution" name="institution" required>
+        
+
+        <label for="position">Your Designation/Position</label>
+        <input type="text" id="position" name="position" required>
+        
+        <label for="delegate_official_address">Official Address *</label>
+        <input type="text" id="delegate_official_address" name="delegate_official_address" required>
+
+        
+        <label for="office_number">Office Telephone Number *</label>
+        <input type="text" id="office_number" name="office_number" required>
+        
+
+        <label for="official_email">Official Email Address *</label>
+        <input type="email" id="official_email" name="official_email" required>
+
+
+
+        <label for="phone">Your primary cellphone contact number for duration of the Conference *</label>
+        <input type="tel" id="phone" name="phone" required>
+
+        <!-- <label for="membership">2024 SASCE Membership Type *</label>
+        <select id="membership" name="membership" required>
+            <option value="Platinum - Educational Institution Partner">Platinum - Educational Institution Partner</option>
+            <option value="Platinum - Open Partnership">Platinum - Open Partnership</option>
+            <option value="Corporate Membership">Corporate Membership</option>
+            <option value="Individual Membership">Individual Membership</option>
+            <option value="No Current SASCE Membership">No Current SASCE Membership</option>
+        </select> -->
+<!-- 
+        <label for="exhibitor">Will you be attending ONLY as an EXHIBITOR? *</label>
+        <select id="exhibitor" name="exhibitor" required>
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+        </select> -->
+
+        <label for="workshop">Will you be attending the Research Publishing </strong> Workshop </strong> from 9h30, 2nd Oct by the Editor of IJWIL? 
+            If yes, NB: Seats are limited, allocated on First-Paid-First Served and First-Come-First-Served basis (Registration at CPUT Hotel School, Granger Bay 9h00-9h30)? *</label>
+        <select id="workshop" name="workshop" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <label for="wil_site_visit">Will you attend West Coast 4IR CoE WIL site visit?*</label>
+        <select id="wil_site_visit" name="wil_site_visit" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <!-- <label for="abstract">Will you be submitting an abstract? *</label>
+        <select id="abstract" name="abstract" required>
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+        </select> -->
+
+        <!-- Abstract-related fields -->
+        <!-- <div id="abstractFields" style="display:none;">
+            <label for="subtheme">Sub-theme under which your Paper/Abstract falls</label>
+            <select id="subtheme" name="subtheme">
+                <option value="Future of Work and Innovations">Future of Work and Innovations</option>
+                <option value="Quality Standards for WIL">Quality Standards for WIL</option>
+                <option value="WIL Industry Partnerships">WIL Industry Partnerships</option>
+                <option value="Future-proof Curriculum">Future-proof Curriculum</option>
+                <option value="Entrepreneurship">Entrepreneurship</option>
+            </select>
+
+            <label for="motivation">Motivation for the Topic (if applicable)</label>
+            <textarea id="motivation" name="motivation"></textarea>
+
+            <label for="topic">Topic of your Paper/Abstract</label>
+            <input type="text" id="topic" name="topic">
+
+            <label for="upload">Upload your Abstract (Max 100MB)</label>
+            <input type="file" id="upload" name="upload[]" multiple accept=".pdf,.doc,.docx,.jpg,.png,.pptx,.xlsx">
+        </div> -->
+
+        <!-- <label for="responsible_payment">Are you personally responsible for payment? *</label>
+        <select id="responsible_payment" name="responsible_payment" required>
+            <option value="I am personally responsible">I am personally responsible</option>
+            <option value="Organisation is responsible">Organisation is responsible</option>
+        </select> -->
+
+
+        <label for="hotel_arrival">Estimated Time of Arrival at your hotel? *</label>
+        <select id="hotel_arrival" name="hotel_arrival" required>
+            <option value="Before 8:00 PM, 1st Oct">Before 8:00 PM, 1st Oct</option>
+            <option value="Before 9:00 AM, 2nd Oct">Before 9:00 AM, 2nd Oct</option>
+            <option value="After 9:00 AM, 2nd Oct">After 9:00 AM, 2nd Oct</option>
+        </select>
+        
+       <label for="hotel_name">Name of the Hotel YOU are Booked in? *</label>
+<select id="hotel_name" name="hotel_name" onchange="showOtherHotelField()" required>
+    <option value="">Select Hotel</option>
+    <option value="Century City Urban Square">Century City Urban Square</option>
+    <option value="Century City Bridgewater">Century City Bridgewater</option>
+    <option value="Other in Century City Precinct">Other in Century City Precinct</option>
+    <option value="Other">Other</option>
+</select>
+
+<!-- Other Hotel Input Field (Hidden by Default) -->
+<div id="otherHotelField" style="display: none;">
+    <label for="other_hotel">Specify the Hotel</label>
+    <input type="text" id="other_hotel" name="other_hotel">
+</div>
+        
+        <div class="note">
+            <p><strong>NB:</strong>IF your arrival is <strong> BEFORE 2nd October</strong> , kindly make sure you have made appropriate arrangement for the additional night AND <strong> Paid directly WITH your HOTEL</strong>  </p>
+
+
+    
+            <label for="registration_desk_arrival">Estimated time of Arrival at Conference Registration Desk? *</label>
+            <select id="registration_desk_arrival" name="registration_desk_arrival" onchange="showOtherRegistrationField()" required>
+                <option value="">Select Time</option>
+                <option value="Oct 1st 2024 3:00 PM - 9:00 PM at the Conference Venue">Oct 1st 2024 3:00 PM - 9:00 PM at the Conference Venue</option>
+                <option value="Oct 2nd 8:00 AM - 8:00 PM at CCC">Oct 2nd 8:00 AM - 8:00 PM at CCC</option>
+                <option value="Other">Other</option>
+            </select>
+            
+            <!-- Other Registration Time Input Field (Hidden by Default) -->
+            <div id="otherRegistrationField" style="display: none;">
+                <label for="other_registration_time">Specify the Registration Time</label>
+                <input type="text" id="other_registration_time" name="other_registration_time">
+            </div>
+        
+
+       
+        
+        <label for="poster_presenting">Will you be presenting an abstract?  IF YES, Pls NOTIFY or register for your poster allocation/location via email: fishera@cput.ac.za; 
+            overmeyerp@cput.ac.za  and cc events@sasce.net*</label>
+        <select id="poster_presenting" name="poster_presenting" required>
+            <option value="Yes">Yes (If yes, remember to notify Poster Facilitators via emails above)</option>
+            <option value="No">No</option>
+        </select>
+
+        <label for="plenary_Breakaway_session">Will you be presenting at a Plenary/Breakaway Session?
+            *</label>
+        <select id="plenary_Breakaway_session" name="plenary_Breakaway_session" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            <option value="Maybe (have not received notification/confirmation from Conference Convener yet)">Maybe (have not received notification/confirmation from Conference Convener yet)</option>
+        </select>
+
+
+        <!-- <label for="invoice_contact">If not, who should be contacted for payment? (Email & Phone)</label>
+        <input type="text" id="invoice_contact" name="invoice_contact"> -->
+        <label for="accommodation">How was YOUR hotel accommodation made? *</label>
+<select id="accommodation" name="accommodation" onchange="showOtherAccommodationField()" required>
+    <option value="">Select Accommodation</option>
+    <option value="Reserved Directly with Hotel">Reserved Directly with Hotel</option>
+    <option value="Booked Through your Travel Agent">Booked Through your Travel Agent</option>
+    <option value="Other">Other</option>
+</select>
+
+<!-- Other Accommodation Input Field (Hidden by Default) -->
+<div id="otherAccommodationField" style="display: none;">
+    <label for="other_accommodation">Specify the Accommodation</label>
+    <input type="text" id="other_accommodation" name="other_accommodation">
+</div>
+
+
+
+       <label for="do_you_have_payment_proof">Do you HAVE YOUR payment confirmation from your Procurement/Finance department? *</label>
+       <select id="do_you_have_payment_proof" name="do_you_have_payment_proof" onchange="showOtherPaymentField()" required>
+           <option value="">Select Option</option>
+           <option value="Yes">Yes</option>
+           <option value="No">No</option>
+           <option value="Other">Other</option>
+       </select>
+       
+       <!-- Other Payment Proof Input Field (Hidden by Default) -->
+       <div id="otherPaymentField" style="display: none;">
+           <label for="other_hotel">Specify Payment Details</label>
+           <input type="text" id="other_payment_proof" name="other_payment_proof">
+       </div>
+
+
+        <label for="payment_reference">Verification - Conference Payment Reference no. details</label>
+        <input type="text" id="payment_reference" name="payment_reference" placeholder="Enter payment reference" required>
+
+        <label for="payment_date">Conference Payment Date (reflected from your Finance admin)</label>
+        <input type="date" id="payment_date" name="payment_date" required>
+
+
+        <!-- <label for="upload">Upload payment verification/pop  (max 100mb)</label>
+        <input type="file" id="upload" name="upload[]" multiple accept=".pdf., .doc , .docx , .jpg , .png , pptx , .xlsx" style="margin-bottom: 10px;" >
+         -->
+        <div class="file-upload-container">
+            <label for="upload">Please UPLOAD your Proof of Payment referenced above, if can't upload, pls your YOUR PoP to: matseke@sasce.net</label>
+            <input type="file" id="upload" name="upload[]" multiple accept=".pdf, .doc, .docx, .jpg, .png, .pptx, .xlsx">
+            <div class="file-info"> Accepted formats: PDF, DOC, DOCX, JPG, PNG. Max file size: 100MB.</div>
+        </div>
+
+<br>
+
+        <button type="submit">Submit</button>
+        <br><br> 
+    </form>
+
+    <script src="script.js" defer></script>
+    <script defer>
+        // Function to show or hide the "Other Title" input field
+        function showOtherTitleField() {
+    var titleDropdown = document.getElementById("title");
+    var otherTitleField = document.getElementById("otherTitleField");
+    var otherTitleInput = document.getElementById("other_title"); // Corrected ID
+
+    // Show the other title input if "Other" is selected
+    if (titleDropdown.value === "Other") {
+        otherTitleField.style.display = "block";
+        // When user types in "Other" input, update the dropdown value to reflect this
+       // otherTitleInput.addEventListener("input", function() {
+          //  titleDropdown.value = otherTitleInput.value;
+       // });
+    } else {
+        otherTitleField.style.display = "none";
+    }
+}
+
+
+function showOtherHotelField() {
+    var hotelDropdown = document.getElementById("hotel_name");
+    var otherHotelField = document.getElementById("otherHotelField");
+    var otherHotelInput = document.getElementById("other_hotel"); // Assuming you have this input for "Other"
+
+    if (hotelDropdown.value === "Other") {
+        otherHotelField.style.display = "block";
+      //  otherHotelInput.addEventListener("input", function() {
+       //     hotelDropdown.value = otherHotelInput.value;
+      //  });
+    } else {
+        otherHotelField.style.display = "none";
+    }
+}
+
+// Function to show or hide the "Other" input field for the registration desk arrival time
+function showOtherRegistrationField() {
+    var registrationDropdown = document.getElementById("registration_desk_arrival");
+    var otherRegistrationField = document.getElementById("otherRegistrationField");
+    var otherRegistrationInput = document.getElementById("other_registration_time"); // Assuming you have this input for "Other"
+
+    if (registrationDropdown.value === "Other") {
+        otherRegistrationField.style.display = "block";
+      ///  otherRegistrationInput.addEventListener("input", function() {
+       //     registrationDropdown.value = otherRegistrationInput.value;
+       // });
+    } else {
+        otherRegistrationField.style.display = "none";
+    }
+}
+
+// Function to show or hide the "Other" input field for accommodation details
+function showOtherAccommodationField() {
+    var accommodationDropdown = document.getElementById("accommodation");
+    var otherAccommodationField = document.getElementById("otherAccommodationField");
+    var otherAccommodationInput = document.getElementById("other_accommodation"); // Assuming you have this input for "Other"
+
+    if (accommodationDropdown.value === "Other") {
+        otherAccommodationField.style.display = "block";
+      //  otherAccommodationInput.addEventListener("input", function() {
+       //     accommodationDropdown.value = otherAccommodationInput.value;
+    
+    } else {
+        otherAccommodationField.style.display = "none";
+    }
+}
+
+
+function showOtherPaymentField() {
+    var paymentProofDropdown = document.getElementById("do_you_have_payment_proof");
+    var otherPaymentProofField = document.getElementById("otherPaymentField");
+    var otherPaymentProofInput = document.getElementById("other_payment_proof");
+
+    // Show the "Other" payment proof field if "Other" is selected in the dropdown
+    if (paymentProofDropdown.value === "Other") {
+        otherPaymentProofField.style.display = "block";
+    } else {
+        otherPaymentProofField.style.display = "none";
+        otherPaymentProofInput.value = ""; // Clear the other payment proof input when not in use
+    }
+}
+
+
+        // Handle form submission
+        function handleFormSubmission(event) {
+            var titleDropdown = document.getElementById("title");
+            var otherTitleInput = document.getElementById("other_title");
+
+            // If "Other" is selected, use the custom title entered by the user
+            if (titleDropdown.value === "Other") {
+              //  titleDropdown.value = otherTitleInput.value;
+            }
+
+
+        }
+    </script>
+</body>
+</html>

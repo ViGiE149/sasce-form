@@ -1,0 +1,135 @@
+/* General Styles */
+body {
+    font-family: 'Helvetica Neue', sans-serif;
+    background-color: #e0f7fa;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Form Container */
+div {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    max-width: 500px;
+    width: 100%;
+    margin: 20px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Form Heading */
+h2 {
+    color: #00695c;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Form Labels */
+label {
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Input Fields */
+input[type="file"] {
+    width: 97%;
+    padding: 12px;
+    border: 2px solid #b2dfdb;
+    border-radius: 10px;
+    background-color: #e0f2f1;
+    margin-bottom: 20px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+input[type="file"]:hover {
+    border-color: #26a69a;
+}
+
+/* Submit Button */
+input[type="submit"] {
+    background-color: #00796b;
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    width: 100%;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #004d40;
+}
+
+/* Additional Elements */
+form::before {
+    content: '';
+    position: absolute;
+    width: 150%;
+    height: 250px;
+    background-color: #80cbc4;
+    top: -150px;
+    left: -50px;
+    border-radius: 50%;
+    z-index: -1;
+}
+
+form::after {
+    content: '';
+    position: absolute;
+    width: 120%;
+    height: 200px;
+    background-color: #4db6ac;
+    bottom: -120px;
+    right: -40px;
+    border-radius: 50%;
+    z-index: -1;
+}
+
+/* Form Responsiveness */
+@media (max-width: 600px) {
+    form {
+        width: 90%;
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    input[type="file"], input[type="submit"] {
+        font-size: 16px;
+    }
+}
+
+#output {
+    background-color: #f4f4f4; /* Light grey background */
+    border: 1px solid #ccc;    /* Border */
+    padding: 15px;             /* Padding around the text */
+    margin: 20px 0;            /* Margin around the element */
+    color: #333;               /* Text color */
+    font-family: 'Courier New', Courier, monospace; /* Monospaced font for code */
+    font-size: 14px;           /* Font size */
+    line-height: 1.5;          /* Line height for readability */
+    white-space: pre-wrap;     /* Preserve whitespace and wrap long lines */
+    overflow: auto;            /* Add scrollbars if content is too long */
+    border-radius: 8px;        /* Rounded corners */
+    max-height: 500px;  
+    margin: 10px;       /* Limit the height of the output */
+}
+

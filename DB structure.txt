@@ -1,0 +1,97 @@
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    Timestamp  VARCHAR(255),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    title VARCHAR(255),
+    name VARCHAR(255) NOT NULL,
+    institution VARCHAR(255),
+    position VARCHAR(255),
+    official_email VARCHAR(255) NOT NULL,
+    office_number VARCHAR(255), 
+    phone VARCHAR(20),
+    membership_type VARCHAR(255),
+    exhibitor VARCHAR(10),
+    workshop VARCHAR(10),
+    abstract VARCHAR(10),
+    subtheme VARCHAR(255),
+    motivation TEXT,
+    topic TEXT,
+    responsible_payment VARCHAR(255),
+    invoice_contact VARCHAR(255),
+    accommodation VARCHAR(255),
+    poster_presenting VARCHAR(255),
+    plenary_Breakaway_session VARCHAR(255),
+    hotel_arrival VARCHAR(255),
+    hotel_name VARCHAR(255),
+    registration_desk_arrival VARCHAR(255),
+    payment_reference VARCHAR(255),
+    payment_date DATE,
+    wil_site_visit VARCHAR(255),
+    delegate_official_address VARCHAR(555), 
+    do_you_have_payment_proof VARCHAR(255),
+    Upload_your_Abstract VARCHAR(255),
+    upload_request_invoice VARCHAR(255),
+    upload_pop   VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+////2
+
+
+
+
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    title VARCHAR(255),
+    institution VARCHAR(255),
+    position VARCHAR(255),
+    official_email VARCHAR(255) NOT NULL,
+    office_number VARCHAR(255), 
+    phone VARCHAR(20),
+    membership_type VARCHAR(255),
+    exhibitor VARCHAR(10),
+    workshop VARCHAR(10),
+    abstract VARCHAR(10),
+    subtheme VARCHAR(255),
+    motivation TEXT,
+    topic TEXT,
+    responsible_payment VARCHAR(255),
+    invoice_contact VARCHAR(255),
+    accommodation VARCHAR(255),
+    poster_presenting VARCHAR(255),
+    plenary_Breakaway_session VARCHAR(255),
+    hotel_arrival VARCHAR(255),
+    hotel_name VARCHAR(255),
+    registration_desk_arrival VARCHAR(255),
+    payment_reference VARCHAR(255),
+    payment_date DATE,
+    wil_site_visit VARCHAR(255),
+    delegate_official_address VARCHAR(555), 
+    do_you_have_payment_proof VARCHAR(255),
+    upload_your_abstract VARCHAR(255),
+    upload_request_invoice VARCHAR(255),
+    upload_pop  VARCHAR(255),
+    upload_filled_in_form VARCHAR(255),
+    Timestamp  VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+
+CREATE TABLE track_submissions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    name  VARCHAR(255),
+    submission_type VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE users
+ADD COLUMN upload_request_invoice  VARCHAR(255);

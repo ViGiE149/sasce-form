@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submissions Table</title>
+    <link rel="stylesheet" href="admin.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+    <style>
+        /* Basic button styles */
+        #downloadUsersBtn {
+            background-color: #007bff; /* Blue background */
+            border: none; /* Remove borders */
+            color: white; /* White text */
+            padding: 15px 30px; /* Add some padding */
+            text-align: center; /* Center the text */
+            text-decoration: none; /* Remove underline */
+            display: inline-block; /* Align button inline */
+            font-size: 16px; /* Increase font size */
+            margin: 10px 0; /* Add some margins */
+            cursor: pointer; /* Add a pointer cursor on hover */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow */
+            transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effects */
+        }
+
+        /* Hover effect */
+        #downloadUsersBtn:hover {
+            background-color: #0056b3; /* Darker blue */
+            transform: scale(1.05); /* Slightly enlarge the button */
+        }
+
+        /* Active effect */
+        #downloadUsersBtn:active {
+            background-color: #004085; /* Even darker blue */
+            transform: scale(0.98); /* Slightly shrink the button */
+        }
+
+      /* Modal styles */
+      .modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 900px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+    max-height: 90vh;
+    transition: transform 0.3s ease-out;
+    transform: scale(0.95);
+}
+
+.modal-content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.modal-details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.modal-detail-item {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease;
+}
+
+.modal-detail-item:hover {
+    background-color: #e8e8e8;
+}
+
+.modal-detail-item strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.modal-detail-item span {
+    color: #333;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.close:hover {
+    color: #000;
+}
+
+@media (max-width: 600px) {
+    .modal-content {
+        width: 90%;
+    }
+
+    .modal-details-grid {
+        grid-template-columns: 1fr;
+    }
+}
+    </style>
+</head>
+<body>
+    <h1>Total Submissions: <span id="totalCount">0</span></h1>
+
+
+    <!-- Button to download user data -->
+    <button id="downloadUsersBtn" class="downloadButton">Download All Users Data</button>
+
+
+    <input type="text" id="search" placeholder="Search by name or email" oninput="searchTable()" />
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>cell number</th>
+                <th>Institution/Organisation</th>
+                <th>Position</th>
+                <th>Timestamp old form</th>
+                <th>Timestamp new form</th>
+            
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+<!-- Modal for showing row details -->
+<div id="userModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>User Details</h2>
+        <div class="modal-details-grid">
+            <div class="modal-detail-item">
+                <strong>Timestamp:</strong> <span id="modalTimestamp"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Email:</strong> <span id="modalEmail"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Name:</strong> <span id="modalName"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Phone:</strong> <span id="modalPhone"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Institution:</strong> <span id="modalInstitution"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Position:</strong> <span id="modalPosition"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Membership Type:</strong> <span id="modalMembership"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Exhibitor:</strong> <span id="modalExhibitor"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Workshop:</strong> <span id="modalWorkshop"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Abstract:</strong> <span id="modalAbstract"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Sub-theme:</strong> <span id="modalSubtheme"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Motivation:</strong> <span id="modalMotivation"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Topic:</strong> <span id="modalTopic"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Uploaded Abstract:</strong> <span id="modalUploadedAbstract"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Upload Invoice:</strong> <span id="modalUploadInvoice"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Responsible for Payment:</strong> <span id="modalResponsiblePayment"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Invoice Contact:</strong> <span id="modalInvoiceContact"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Delegate Official Address:</strong> <span id="modalDelegateAddress"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Office Number:</strong> <span id="modalOfficeNumber"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>WIL Site Visit:</strong> <span id="modalWilSiteVisit"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Arrival Time (Hotel):</strong> <span id="modalArrivalTimeHotel"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Hotel Name:</strong> <span id="modalHotelName"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Arrival Time (Registration):</strong> <span id="modalArrivalTimeRegistration"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Accommodation Made:</strong> <span id="modalAccommodationMade"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Payment Proof:</strong> <span id="modalPaymentProof"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Payment Reference:</strong> <span id="modalPaymentReference"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Request Invoice(upload):</strong> <span id="modalRequestInvoice"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Upload filled in form:</strong> <span id="modalFillInForm"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Payment Date:</strong> <span id="modalPaymentDate"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Upload POP:</strong> <span id="modalUploadPOP"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Created At:</strong> <span id="modalCreatedAt"></span>
+            </div>
+            <div class="modal-detail-item">
+                <strong>Updated At:</strong> <span id="modalUpdatedAt"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="scriptAdmin.js" defer></script>
+</body>
+</html>
