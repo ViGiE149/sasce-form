@@ -33,7 +33,15 @@ $rowsPerPage = 1000;
 $offset = ($page - 1) * $rowsPerPage;
 
 // SQL query for fetching submissions
-   
+ // SQL query for fetching submissions
+$sql = "SELECT   email, `name`, title, institution, position, office_number, official_email, 
+phone,diet,workshop, abstract,  exhibitor, upload_request_invoice, upload_filled_in_form,
+accommodation, motivation, membership_type,subtheme,responsible_payment,invoice_contact,
+poster_presenting, plenary_Breakaway_session, hotel_name, payment_reference, 
+payment_date, wil_site_visit, delegate_official_address, hotel_arrival, upload_your_abstract ,
+registration_desk_arrival, do_you_have_payment_proof, upload_pop ,Timestamp,created_at,updated_at FROM users WHERE name LIKE ? OR email LIKE ? LIMIT ?, ?";  
+
+
 $stmt = $conn->prepare($sql);
 
 // Check for errors in query preparation

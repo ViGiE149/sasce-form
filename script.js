@@ -108,10 +108,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         document.getElementById('position').value = (
                             data.position  || ''
                         ).trim();
-
+                        document.getElementById('diet').value = (
+                            data.diet  || ''
+                        ).trim();
 
                          // Handle tittle logic
-                        const validTitles = ['Ms', 'Mrs', 'Adv', 'Prof', 'Mr'];
+                        const validTitles = ['Ms', 'Mrs', 'Adv', 'Prof', 'Mr','Dr'];
                         const title = (data.title || '').trim();
                         if (!validTitles.includes(title)) {
                             document.getElementById('other_title').value =
@@ -125,17 +127,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
                          // Handle hotel name logic
                         const validHotels = [
-                            'Century City Urban Square',
-                            'Century City Bridgewater',
-                            'Other in Century City Precinct',
+                            'Reserved Directly with Hotel',
+                            'Booked Through your Travel Agent',
+                            'Booked & Paid for through SASCE (2-night allocation 2nd & 3rd)',
+                            'Accommodation not Booked/not needed'
                         ];
                         const hotelName = (data.hotel_name || '').trim();
                         if (!validHotels.includes(hotelName)) {
                             document.getElementById('other_hotel').value =
                                 hotelName; // Set current hotel_name to other_hotel
-                            document.getElementById('hotel_name').value =
-                                'Other'; // Set hotel_name to 'Other'
-                                document.getElementById('otherHotelField').style.display = "block";
+                           // document.getElementById('hotel_name').value =
+                              //  'Other'; // Set hotel_name to 'Other'
+                               // document.getElementById('otherHotelField').style.display = "block";
                         } else {
                             document.getElementById('otherHotelField').style.display  = "none";
                             document.getElementById('other_hotel').value = ''; // Clear other_hotel if hotel_name is valid

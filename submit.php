@@ -1,4 +1,5 @@
 <?php
+session_start(); // Start the session
 // Database connection
 // $servername = "localhost";
 // $username = "root";
@@ -51,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $submission_type = isset($_POST['submission_type']) ? $conn->real_escape_string(trim($_POST['submission_type'])) : '';
     $plenary_Breakaway_session = isset($_POST['plenary_Breakaway_session']) ? $conn->real_escape_string(trim($_POST['plenary_Breakaway_session'])) : '';
     $position = isset($_POST['position']) ? $conn->real_escape_string(trim($_POST['position'])) : '';
+    $diet = isset($_POST['diet']) ? $conn->real_escape_string(trim($_POST['diet'])) : '';
 
     // Other fields
     $other_title = isset($_POST['other_title']) ? $conn->real_escape_string(trim($_POST['other_title'])) : '';
@@ -80,16 +82,64 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $do_you_have_payment_proof = $other_payment_proof; 
     }
 
+
+   
     // File upload logic
    // File upload logic
 // File upload logic for a single file
 $upload_pop = '';
 if (isset($_FILES['upload']) && $_FILES['upload']['error'] == UPLOAD_ERR_OK) {
     $uploads_dir = 'uploads/payment_proof/';
+    
+    // Ensure the upload directory exists
+    if (!file_exists($uploads_dir) && !mkdir($uploads_dir, 0755, true)) {
+        die('Failed to create upload directory');
+    }
+    
     $tmp_name = $_FILES['upload']['tmp_name'];
-    $file_name = preg_replace("/[^A-Za-z0-9._-]/", "_", $_FILES['upload']['name']);
-    move_uploaded_file($tmp_name, "$uploads_dir$file_name");
-    $upload_pop = $conn->real_escape_string("https://sasce.net/form/$uploads_dir$file_name");
+    $original_name = $_FILES['upload']['name'];
+    $file_extension = strtolower(pathinfo($original_name, PATHINFO_EXTENSION));
+    
+    // Validate file type
+    $allowed_types = ['pdf', 'doc', 'docx', 'jpg', 'png', 'pptx', 'xlsx'];
+    if (!in_array($file_extension, $allowed_types)) {
+        die('Invalid file type. Allowed types are: ' . implode(', ', $allowed_types));
+    }
+    
+    // Validate file size (100MB limit)
+    if ($_FILES['upload']['size'] > 100 * 1024 * 1024) {
+        die('File is too large. Maximum size is 100MB.');
+    }
+    
+    // Generate a unique filename including the user's name
+    $sanitized_name = preg_replace("/[^A-Za-z0-9]/", '_', $name);
+    $file_name = $sanitized_name . '_' . uniqid() . '.' . $file_extension;
+    $file_path = $uploads_dir . $file_name;
+    
+    if (move_uploaded_file($tmp_name, $file_path)) {
+        $upload_pop = "https://sasce.net/form/$file_path";
+    } else {
+        die('Failed to move uploaded file');
+    }
+} else {
+    // Handle upload errors
+    if (isset($_FILES['upload']['error']) && $_FILES['upload']['error'] != UPLOAD_ERR_NO_FILE) {
+        $upload_errors = [
+            UPLOAD_ERR_INI_SIZE => "The uploaded file exceeds the upload_max_filesize directive in php.ini",
+            UPLOAD_ERR_FORM_SIZE => "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form",
+            UPLOAD_ERR_PARTIAL => "The uploaded file was only partially uploaded",
+            UPLOAD_ERR_NO_TMP_DIR => "Missing a temporary folder",
+            UPLOAD_ERR_CANT_WRITE => "Failed to write file to disk",
+            UPLOAD_ERR_EXTENSION => "A PHP extension stopped the file upload"
+        ];
+        $error_message = isset($upload_errors[$_FILES['upload']['error']]) 
+            ? $upload_errors[$_FILES['upload']['error']] 
+            : "Unknown upload error";
+        die($error_message);
+    }
+    
+    // If no file uploaded, check for upload_pop in POST data
+    $upload_pop = isset($_POST['upload_pop']) ? trim($_POST['upload_pop']) : '';
 }
 
 
@@ -103,14 +153,14 @@ $row_count_before = $row_before['row_count'];
     // SQL query for insert or update
     $sql = "INSERT INTO users (
         email, `name`, title, institution, position, office_number, official_email, 
-        phone,workshop, abstract, 
+        phone,diet,workshop, abstract, 
         accommodation, 
         poster_presenting, plenary_Breakaway_session, hotel_name, payment_reference, 
         payment_date, wil_site_visit, delegate_official_address, hotel_arrival, 
         registration_desk_arrival, do_you_have_payment_proof, upload_pop
     ) VALUES (
         '$email', '$name', '$title', '$institution', '$position', '$office_number', 
-        '$official_email', '$phone', '$workshop', 
+        '$official_email', '$phone','$diet' ,'$workshop', 
         '$abstract', 
         '$accommodation', '$poster_presenting', 
         '$plenary_Breakaway_session', '$hotel_name', '$payment_reference', 
@@ -126,6 +176,7 @@ $row_count_before = $row_before['row_count'];
         office_number = '$office_number', 
         official_email = '$official_email', 
         phone = '$phone', 
+        diet = '$diet', 
         -- membership_type = '$membership', 
         -- exhibitor = '$exhibitor', 
         workshop = '$workshop', 
@@ -150,57 +201,6 @@ $row_count_before = $row_before['row_count'];
 
 
 
-
-// // SQL query for insert or update
-// $sql = "INSERT INTO users (
-//     email, `name`, title, institution, position, office_number, official_email, 
-//     phone, membership_type, exhibitor, workshop, abstract, subtheme, 
-//     motivation, topic, responsible_payment, invoice_contact, accommodation, 
-//     poster_presenting, plenary_Breakaway_session, hotel_name, payment_reference, 
-//     payment_date, wil_site_visit, delegate_official_address, hotel_arrival, 
-//     registration_desk_arrival, do_you_have_payment_proof, upload_pop
-// ) VALUES (
-//     '$email', '$name', '$title', '$institution', '$position', '$office_number', 
-//     '$official_email', '$phone', '$membership', '$exhibitor', '$workshop', 
-//     '$abstract', '$subtheme', '$motivation', '$topic', '$responsible_payment', 
-//     '$invoice_contact', '$accommodation', '$poster_presenting', 
-//     '$plenary_Breakaway_session', '$hotel_name', '$payment_reference', 
-//     '$payment_date', '$wil_site_visit', '$delegate_official_address', 
-//     '$hotel_arrival', '$registration_desk_arrival', '$do_you_have_payment_proof', 
-//     '$upload_pop'
-// )
-// ON DUPLICATE KEY UPDATE
-//     name = '$name', 
-//     title = '$title', 
-//     institution = '$institution', 
-//     position = '$position', 
-//     office_number = '$office_number', 
-//     official_email = '$official_email', 
-//     phone = '$phone', 
-//     membership_type = '$membership', 
-//     -- exhibitor = '$exhibitor', 
-//     workshop = '$workshop', 
-//     abstract = '$abstract', 
-//     -- subtheme = '$subtheme', 
-//     -- motivation = '$motivation', 
-//     topic = '$topic', 
-//     -- responsible_payment = '$responsible_payment', 
-//     -- invoice_contact = '$invoice_contact', 
-//     accommodation = '$accommodation', 
-//     poster_presenting = '$poster_presenting', 
-//     plenary_Breakaway_session = '$plenary_Breakaway_session', 
-//     hotel_name = '$hotel_name', 
-//     payment_reference = '$payment_reference', 
-//     payment_date = '$payment_date', 
-//     wil_site_visit = '$wil_site_visit', 
-//     delegate_official_address = '$delegate_official_address', 
-//     hotel_arrival = '$hotel_arrival', 
-//     registration_desk_arrival = '$registration_desk_arrival', 
-//     do_you_have_payment_proof = '$do_you_have_payment_proof',
-//     upload_POP = '$upload_pop'";
-
-
-
  // Insert or update the data in the database
  $sql2 = "INSERT INTO track_submissions (email, name,submission_type) 
  VALUES ('$email', '$name' ,'$submission_type')";
@@ -216,10 +216,21 @@ $row_count_before = $row_before['row_count'];
     // Determine the submission type
     if ($row_count_after > $row_count_before) {
         $submission_type = 'submit';
+
+
     } else {
         $submission_type = 'update';
     }
 
+     // Store the data in session variables
+$_SESSION['email'] = $email;
+$_SESSION['name'] = $name;
+$_SESSION['institution'] = $institution;
+$_SESSION['official_email'] = $official_email;
+$_SESSION['workshop'] = $workshop;
+$_SESSION['diet'] = $diet;
+$_SESSION['submission_type'] = $submission_type;
+$_SESSION['POP'] = $upload_pop;
     // Insert into track_submissions with the determined submission_type
     $sql2 = "INSERT INTO track_submissions (email, name, submission_type) 
              VALUES ('$email', '$name', '$submission_type')";
@@ -283,6 +294,7 @@ $row_count_before = $row_before['row_count'];
          </div>
      </body>
      </html>";
+    header("Location: send_email.php");
  } else {
      // Display error message with styled content
  echo "

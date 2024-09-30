@@ -148,6 +148,7 @@ const headers = [
     'Conference Payment Date (reflected from your Finance admin)',
     'Please UPLOAD your Proof of Payment referenced above, if can\'t upload, pls your YOUR PoP to: matseke@sasce.net',
     'Will you be presenting at a Plenary/Breakaway Session?',
+    'Please state special dietary requirements if any',
     'Upload your Filled-in form',
     'Upload Request for Invoice for Registration (With Individuals\' FULL details for each delegate to be billed to your cost centre)',
     "Timestamp new form"
@@ -188,6 +189,7 @@ data.data.forEach(submission => {
         submission.payment_date,
         submission.upload_pop,
         submission.plenary_Breakaway_session,
+        submission.diet,
         submission.upload_filled_in_form,
         submission.upload_request_invoice,
         submission.created_at
@@ -244,6 +246,7 @@ function showModal(submission) {
     document.getElementById('modalUpdatedAt').textContent = submission.updated_at || 'N/A';
     document.getElementById('modalRequestInvoice').textContent = submission.upload_request_invoice || 'N/A';
     document.getElementById('modalFillInForm').textContent = submission.modalFillInForm || 'N/A';
+    document.getElementById('modalDiet').textContent = submission.diet || 'N/A';
     // Display the modal
     document.getElementById('userModal').style.display = 'block';
 }

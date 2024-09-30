@@ -66,8 +66,19 @@
         <label for="phone">Your primary cellphone contact number for duration of the Conference *</label>
         <input type="tel" id="phone" name="phone" required>
 
+
+        <label for="diet">Please state special dietary requirements if any:</label>
+        <select id="diet" name="diet" required>
+            <option value="">--Select an option--</option>
+            <option value="vegetarian">Vegetarian</option>
+            <option value="halaal">Halaal</option>
+            <option value="kosher">Kosher</option>
+            <option value="vegan">Vegan</option>
+            <option value="none">None</option>
+        </select>
+
         <!-- <label for="membership">2024 SASCE Membership Type *</label>
-        <select id="membership" name="membership" required>
+        <select id="membership" name="membership" >
             <option value="Platinum - Educational Institution Partner">Platinum - Educational Institution Partner</option>
             <option value="Platinum - Open Partnership">Platinum - Open Partnership</option>
             <option value="Corporate Membership">Corporate Membership</option>
@@ -76,7 +87,7 @@
         </select> -->
 <!-- 
         <label for="exhibitor">Will you be attending ONLY as an EXHIBITOR? *</label>
-        <select id="exhibitor" name="exhibitor" required>
+        <select id="exhibitor" name="exhibitor" >
             <option value="No">No</option>
             <option value="Yes">Yes</option>
         </select> -->
@@ -95,7 +106,7 @@
         </select>
 
         <!-- <label for="abstract">Will you be submitting an abstract? *</label>
-        <select id="abstract" name="abstract" required>
+        <select id="abstract" name="abstract" >
             <option value="No">No</option>
             <option value="Yes">Yes</option>
         </select> -->
@@ -122,7 +133,7 @@
         </div> -->
 
         <!-- <label for="responsible_payment">Are you personally responsible for payment? *</label>
-        <select id="responsible_payment" name="responsible_payment" required>
+        <select id="responsible_payment" name="responsible_payment" >
             <option value="I am personally responsible">I am personally responsible</option>
             <option value="Organisation is responsible">Organisation is responsible</option>
         </select> -->
@@ -135,8 +146,8 @@
             <option value="After 9:00 AM, 2nd Oct">After 9:00 AM, 2nd Oct</option>
         </select>
         
-       <label for="hotel_name">Name of the Hotel YOU are Booked in? *</label>
-<select id="hotel_name" name="hotel_name" onchange="showOtherHotelField()" required>
+       <!-- <label for="hotel_name">Name of the Hotel YOU are Booked in? *</label> -->
+<select id="hotel_name" name="hotel_name" onchange="showOtherHotelField()" style="display: none;" >
     <option value="">Select Hotel</option>
     <option value="Century City Urban Square">Century City Urban Square</option>
     <option value="Century City Bridgewater">Century City Bridgewater</option>
@@ -193,8 +204,10 @@
         <label for="accommodation">How was YOUR hotel accommodation made? *</label>
 <select id="accommodation" name="accommodation" onchange="showOtherAccommodationField()" required>
     <option value="">Select Accommodation</option>
-    <option value="Reserved Directly with Hotel">Reserved Directly with Hotel</option>
+    <option value="RReserved Directly with Hotel">Reserved Directly with Hotel</option>
     <option value="Booked Through your Travel Agent">Booked Through your Travel Agent</option>
+    <option value="Booked & Paid for through SASCE (2-night allocation 2nd & 3rd)">Booked & Paid for through SASCE (2-night allocation 2nd & 3rd)</option>
+    <option value="Accommodation not Booked/not needed">Accommodation not Booked/not needed</option>
     <option value="Other">Other</option>
 </select>
 
@@ -222,7 +235,7 @@
 
 
         <label for="payment_reference">Verification - Conference Payment Reference no. details</label>
-        <input type="text" id="payment_reference" name="payment_reference" placeholder="Enter payment reference" required>
+        <input type="text" id="payment_reference" name="payment_reference" placeholder="Enter payment reference" >
 
         <label for="payment_date">Conference Payment Date (reflected from your Finance admin)</label>
         <input type="date" id="payment_date" name="payment_date" required>
@@ -231,11 +244,13 @@
         <!-- <label for="upload">Upload payment verification/pop  (max 100mb)</label>
         <input type="file" id="upload" name="upload[]" multiple accept=".pdf., .doc , .docx , .jpg , .png , pptx , .xlsx" style="margin-bottom: 10px;" >
          -->
-        <div class="file-upload-container">
-            <label for="upload">Please UPLOAD your Proof of Payment referenced above, if can't upload, pls your YOUR PoP to: matseke@sasce.net</label>
-            <input type="file" id="upload" name="upload[]" multiple accept=".pdf, .doc, .docx, .jpg, .png, .pptx, .xlsx">
-            <div class="file-info"> Accepted formats: PDF, DOC, DOCX, JPG, PNG. Max file size: 100MB.</div>
-        </div>
+      
+         <input type="hidden" id="upload_pop" name="upload_pop">
+         <div class="file-upload-container">
+             <label for="upload">Please UPLOAD your Proof of Payment referenced above, if can't upload, pls your YOUR PoP to: matseke@sasce.net</label>
+             <input type="file" id="upload" name="upload" multiple accept=".pdf, .doc, .docx, .jpg, .png, .pptx, .xlsx">
+             <div class="file-info">Accepted formats: PDF, DOC, DOCX, JPG, PNG. Max file size: 100MB.</div>
+         </div>
 
 <br>
 
@@ -265,18 +280,18 @@
 
 
 function showOtherHotelField() {
-    var hotelDropdown = document.getElementById("hotel_name");
-    var otherHotelField = document.getElementById("otherHotelField");
-    var otherHotelInput = document.getElementById("other_hotel"); // Assuming you have this input for "Other"
+    // // var hotelDropdown = document.getElementById("hotel_name");
+    // // var otherHotelField = document.getElementById("otherHotelField");
+    // // var otherHotelInput = document.getElementById("other_hotel"); // Assuming you have this input for "Other"
 
-    if (hotelDropdown.value === "Other") {
-        otherHotelField.style.display = "block";
-      //  otherHotelInput.addEventListener("input", function() {
-       //     hotelDropdown.value = otherHotelInput.value;
-      //  });
-    } else {
-        otherHotelField.style.display = "none";
-    }
+    // // if (hotelDropdown.value === "Other") {
+    // //     otherHotelField.style.display = "block";
+    // //   //  otherHotelInput.addEventListener("input", function() {
+    // //    //     hotelDropdown.value = otherHotelInput.value;
+    // //   //  });
+    // // } else {
+    // //     otherHotelField.style.display = "none";
+    // }
 }
 
 // Function to show or hide the "Other" input field for the registration desk arrival time

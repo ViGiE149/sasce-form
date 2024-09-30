@@ -3,15 +3,15 @@ header('Content-Type: application/json');
 
 // Database connection 
 //sascezdvme_db1
-// $servername = "localhost";
-// $username = "root";
-// $password = "";
-// $dbname = "conference_db";
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "conference_db";
 
-$servername = "sql57.jnb2.host-h.net";
-$username = "sascezdvme_3";
-$password = "NRcUUAZZmN4D5mCUsnS8";
-$dbname = "sascezdvme_db3";
+// $servername = "sql57.jnb2.host-h.net";
+// $username = "sascezdvme_3";
+// $password = "NRcUUAZZmN4D5mCUsnS8";
+// $dbname = "sascezdvme_db3";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -48,6 +48,7 @@ if (!empty($email)) {
           'position' => $row['position'],
           'officialEmail' => $row['official_email'],
           'phone' => $row['phone'],
+          'diet' => $row['diet'],
           'office_number' => $row['office_number'],
           'membershipType' => $row['membership_type'],
           'exhibitor' => $row['exhibitor'],
